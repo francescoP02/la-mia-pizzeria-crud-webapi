@@ -26,7 +26,7 @@ namespace la_mia_pizzeria_static.Controllers
             using (PizzaContext context = new PizzaContext())
             {
                 //List<Pizza> pizzas = context.pizzasList.ToList<Pizza>();
-                return View("Index", context.pizzasList.Include(p => p.Category).Include("Ingredients").ToList());
+                return View(/*"Index", context.pizzasList.Include(p => p.Category).Include("Ingredients").ToList()*/);
             }
 
         }
