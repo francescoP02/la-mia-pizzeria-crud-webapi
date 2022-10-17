@@ -32,7 +32,7 @@ namespace la_mia_pizzeria_static.Controllers.Api
             return Ok(pizzas);
         }
 
-        //[HttpGet("{id}")]
+        [HttpGet("{id}")]
         public IActionResult Show(int id)
         {
 
