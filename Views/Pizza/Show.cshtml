@@ -1,31 +1,38 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-
-@model Pizza
-
+﻿
 @{
-    ViewData["Title"] = Model.Name;
     Layout = "_Layout";
 }
-
-<div class="container">
-    <h1>@Model.Name</h1>
-    <div class="clearfix">
-        <img src="@Model.Photo" class="col-md-6 float-md-end mb-3 ms-md-3" alt="@Model.Name">
-
-        <p class="card-text">@Model.Description</p>
-        <p class="card-text">Price: @Model.Price €</p>
-        <p class="card-text">Category: @Model.Category.Name</p>
-        @if (Model.Ingredients != null)
-        {
-            <p class="card-text">Ingredients:</p>
-            <ul>
-                @foreach (Ingredient ing in Model.Ingredients)
-                {
-                    <li>@ing.Title</li>
-                }
-            </ul>
-        }
-    </div>
+@model int
+<div class="container" id="js_pizza">
 </div>
+
+<script type="text/javascript">
+
+    const id = @Model
+
+        axios.get(`/api/Pizzas/${id}`).then((res) => {
+            const pizza = res.data;
+            console.log(pizza)
+            document.getElementById('js_pizza').innerHTML +=
+                `
+                <h1>${pizza.name}</h1>
+                <div class="clearfix">
+                    <img src="${pizza.photo}" class="col-md-6 float-md-end mb-3 ms-md-3" alt="${pizza.name}">
+                    <p class="card-text">${pizza.description}</p>
+                    <p class="card-text">Price: ${pizza.price} €</p>
+                    <p class="card-text">Category: ${pizza.category.name}</p>
+                    <p class="card-text">Ingredients: </p>
+                    <ul id="js_ingredients"></ul>
+
+                </div>`;
+
+            res.data.ingredients.forEach(ingredient => {
+                console.log(ingredient);
+                document.getElementById('js_ingredients').innerHTML +=
+                    `<li>${ingredient.title}</li>`
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+</script>

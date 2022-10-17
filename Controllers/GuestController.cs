@@ -17,20 +17,22 @@ namespace la_mia_pizzeria_static.Controllers
         public IActionResult Index()
         {
            
-            return View("Index", _db.pizzasList.Include(p => p.Category).Include("Ingredients").ToList());
+            return View(/*"Index", _db.pizzasList.Include(p => p.Category).Include("Ingredients").ToList()*/);
            
         }
         public IActionResult Show(int id)
         {
-            try
-            {
-                Pizza toShow = _db.pizzasList.Where(x => x.Id == id).Include(pizza => pizza.Category).Include("Ingredients").FirstOrDefault();
-                return View("Show", toShow);
-            }
-            catch
-            {
-                return View("Error");
-            }
+            //try
+            //{
+            //    Pizza toShow = _db.pizzasList.Where(x => x.Id == id).Include(pizza => pizza.Category).Include("Ingredients").FirstOrDefault();
+            //    return View("Show", toShow);
+            //}
+            //catch
+            //{
+            //    return View("Error");
+            //}
+
+            return View( id );
         }
     }
 }

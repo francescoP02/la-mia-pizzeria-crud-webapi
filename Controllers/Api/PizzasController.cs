@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using la_mia_pizzeria_static.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace la_mia_pizzeria_static.Controllers.Api
 {
@@ -16,10 +18,32 @@ namespace la_mia_pizzeria_static.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult GetPizzas()
+        public IActionResult GetPizzas(string? search)
         {
-            IQueryable<Pizza> pizzas = _db.pizzasList;
-            return Ok(pizzas.ToList());
+            List<Pizza> pizzas;
+
+            if (search != null && search != "")
+            {
+                pizzas = _db.pizzasList.Where(pizza => pizza.Name.Contains(search)).ToList();
+            } else
+            {
+                pizzas = _db.pizzasList.ToList();
+            }
+            return Ok(pizzas);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult ShowPizza(int id)
+        {
+
+            Pizza pizza = _db.pizzasList.Where(pizza => pizza.Id == id).Include("Category").Include("Ingredients").FirstOrDefault();
+
+            if (pizza == null)
+            {
+                return NotFound();
+            }
+            return Ok(pizza);
+
         }
     }
 }

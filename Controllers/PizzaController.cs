@@ -144,20 +144,22 @@ namespace la_mia_pizzeria_static.Controllers
         public IActionResult Show(int id)
         {
 
-            using (PizzaContext db = new PizzaContext())
-            {
+            //using (PizzaContext db = new PizzaContext())
+            //{
 
-                try
-                {
-                    Pizza toShow = db.pizzasList.Where(x => x.Id == id).Include(pizza => pizza.Category).Include("Ingredients").FirstOrDefault();
-                    return View("Show", toShow);
-                }
-                catch
-                {
-                    return View("Error");
-                }
+            //    try
+            //    {
+            //        Pizza toShow = db.pizzasList.Where(x => x.Id == id).Include(pizza => pizza.Category).Include("Ingredients").FirstOrDefault();
+            //        return View("Show", toShow);
+            //    }
+            //    catch
+            //    {
+            //        return View("Error");
+            //    }
 
-            }
+            //}
+
+            return View(id);
 
         }
 

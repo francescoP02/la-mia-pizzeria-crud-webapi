@@ -9,48 +9,81 @@
 @model List<Pizza>
 
 <html>
+<head>
+    @*BOOTSTRAP*@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
 
 <body>
+    <div>
+        <input id="search_pizza" type="text" class="form-control" placeholder="Search pizza..." onkeyup="searchPizza" />
+    </div>
     <h1 class="text-center my-4">Lista pizze:</h1>
     <div class="container">
-        @if (Model.Count > 0)
-        {
-            <div class="row row-cols-4 justify-content-around">
 
-                @foreach (Pizza pizza in Model)
-                {
-                    <div class="card my-3" style="width: 18rem;">
-                        <img src="@pizza.Photo" class="card-img-top py-1" alt="...">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">@pizza.Name</h5>
-                            <p class="card-text">@pizza.Description</p>
-                            <p class="card-text">Price: @pizza.Price €</p>
-                            <p class="card-text">@pizza.Category.Name</p>
-
-                            @if (pizza.Ingredients != null)
-                            {
-                                <p class="card-text">Ingredients:</p>
-                                <ul>
-                                    @foreach (Ingredient ing in pizza.Ingredients)
-                                    {
-                                        <li>@ing.Title</li>
-                                    }
-                                </ul>
-                            }
-
-                        </div>
-                        <div class="card-footer d-flex justify-content-around">
-                            <a href="@Url.Action("Show", "Guest", new {id = pizza.Id})" type="button" class="btn btn-primary">View Pizza</a>
-                        </div>
-                    </div>
-                }
+        <div class="row js_no_pizze text-center d-none">
+            <div class="col-12">
+                <h3>Non ci sono pizze</h3>
             </div>
-        }
-        else
-        {
-            <h6 class="text-center">No pizza insert</h6>
-        }
+        </div>
 
-    </div>
+        <div class="row row-cols-4 justify-content-around js_pizze text-center d-none">
+
+            @*Qui vanno le card delle pizze*@
+
+        </div>
 </body>
 </html>
+
+<script type="text/javascript">
+    document.getElementById("search_pizza").addEventListener("keyup", searchPizza);
+    loadPizze();
+    function searchPizza(event) {
+        const value = document.getElementById("search_pizza").value;
+        loadPizze(value);
+    }
+
+    function loadPizze(search) {
+        axios.get('api/Pizzas', {
+            params: {
+                search: search
+            }
+        }).then((resp) => {
+            if (resp.data.length == 0) {
+                document.querySelector('.js_no_pizze').classList.remove('d-none');
+                document.querySelector('.js_pizze').classList.add('d-none');
+            }
+            else {
+                document.querySelector('.js_no_pizze').classList.add('d-none');
+                document.querySelector('.js_pizze').classList.remove('d-none');
+                document.querySelector('.js_pizze').innerHTML = '';
+                resp.data.forEach(pizza => {
+                    console.log('pizza', pizza)
+                    document.querySelector('.js_pizze').innerHTML +=
+                        `<div class="card my-3" style="width: 18rem;">
+                                    <img src="${pizza.photo}" class="card-img-top py-1" alt="${pizza.name}">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">${pizza.name}</h5>
+                                    <p class="card-text">${pizza.description}</p>
+                                    <p class="card-text">Price: ${pizza.price} €</p>
+
+
+                                </div>
+                                <div class="card-footer d-flex justify-content-around">
+                                    <a href="Guest/Show/${pizza.id}" type = "button" class="btn btn-primary"> View Pizza </a>
+                                    <a class="btn btn-warning" href="Pizza/EditForm/${pizza.id}">Edit</a>
+                                    <a class="btn btn-danger" href="Pizza/Delete/${pizza.id}">Delete</a>
+                                </div>
+                            </div>`
+                })
+            }
+        })
+            .catch(err => {
+                console.log('No pizza found', err);
+            })
+    }
+
+
+</script>
+</script>

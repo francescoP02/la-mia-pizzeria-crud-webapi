@@ -13,6 +13,9 @@
     </head>
 
     <body>
+        <div>
+            <input id="search_pizza" type="text" class="form-control" placeholder="Search pizza..." onkeyup="searchPizza" />
+        </div>
         <h1 class="text-center my-4">Lista pizze:</h1>
         <div class="container">
 
@@ -31,10 +34,19 @@
 </html>
 
 <script type="text/javascript">
+    document.getElementById("search_pizza").addEventListener("keyup", searchPizza);
+    loadPizze();
+    function searchPizza(event) {
+        const value = document.getElementById("search_pizza").value;
+        loadPizze(value);
+    }
 
-    loadPizze()
-    function loadPizze() {
-        axios.get('api/Pizzas').then((resp) => {
+    function loadPizze(search) {
+        axios.get('api/Pizzas', {
+            params: {
+                search: search
+            }
+        }).then((resp) => {
             if (resp.data.length == 0) {
                 document.querySelector('.js_no_pizze').classList.remove('d-none');
                 document.querySelector('.js_pizze').classList.add('d-none');
@@ -48,18 +60,16 @@
                     document.querySelector('.js_pizze').innerHTML +=
                         `<div class="card my-3" style="width: 18rem;">
                                 <img src="${pizza.photo}" class="card-img-top py-1" alt="${pizza.name}">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">${pizza.name}</h5>
-                                <p class="card-text">${pizza.description}</p>
-                                <p class="card-text">Price: ${pizza.price} €</p>
-                                
-    
-                            </div>
-                            <div class="card-footer d-flex justify-content-around">
-                                <a href="Pizza/Show/${pizza.id}" type = "button" class="btn btn-primary"> View Pizza </a>
-                                <a class="btn btn-warning" href="Pizza/EditForm/${pizza.id}">Edit</a>
-                                <a class="btn btn-danger" href="Pizza/Delete/${pizza.id}">Delete</a>
-                            </div>
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">${pizza.name}</h5>
+                                    <p class="card-text">${pizza.description}</p>
+                                    <p class="card-text">Price: ${pizza.price} €</p>
+                                </div>
+                                <div class="card-footer d-flex justify-content-around">
+                                    <a href="Pizza/Show/${pizza.id}" type = "button" class="btn btn-primary"> View Pizza </a>
+                                    <a class="btn btn-warning" href="Pizza/EditForm/${pizza.id}">Edit</a>
+                                    <a class="btn btn-danger" href="Pizza/Delete/${pizza.id}">Delete</a>
+                                </div>
                         </div>`
                 })
             }
