@@ -18,7 +18,7 @@ namespace la_mia_pizzeria_static.Controllers.Api
         }
 
         [HttpGet]
-        public IActionResult GetPizzas(string? search)
+        public IActionResult Get(string? search)
         {
             List<Pizza> pizzas;
 
@@ -32,8 +32,8 @@ namespace la_mia_pizzeria_static.Controllers.Api
             return Ok(pizzas);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult ShowPizza(int id)
+        //[HttpGet("{id}")]
+        public IActionResult Show(int id)
         {
 
             Pizza pizza = _db.pizzasList.Where(pizza => pizza.Id == id).Include("Category").Include("Ingredients").FirstOrDefault();
