@@ -1,0 +1,73 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout";
+}
+
+<h1>Contact us</h1>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-5">
+            <form onsubmit="SendMessage(event)">
+                <div class="mb-3">
+                    <label for="message-email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="message-email">
+                </div>
+                <div class="mb-3">
+                    <label for="message-name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="message-name">
+                </div>
+                <div class="mb-3">
+                    <label for="message-title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="message-title">
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="form-label">Text</label>
+                    <textarea class="form-control" id="message-text" rows="10"></textarea>
+                </div>
+                <input type="submit" class="btn btn-primary" onclick="resultMessage()" value="Send" />
+            </form>
+        </div>
+        <div id="_resultBox" class="_bg_wrap d-none">
+            <div class="bg-light d-inline-block p-4 fw-bold rounded position-absolute bottom-50 end-50 text-center">
+                <p id="js_result_message" class="text-black"></p>
+                <div class="d-flex">
+                    <a href="/Pizza" type="button" class="btn btn-primary mx-2">Return to Pizza's List'</a>
+                    <a class="btn btn-primary mx-2" href="/Pizza/Contact">Send another message</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    function resultMessage() {
+        const deleteBox = document.getElementById('_resultBox');
+        deleteBox.classList.toggle('d-none');
+    }
+
+    function SendMessage(e) {
+        e.preventDefault();
+        axios.post("/api/message/send", {
+            email: document.getElementById('message-email').value,
+            name: document.getElementById('message-name').value,
+            title: document.getElementById('message-title').value,
+            text: document.getElementById('message-text').value,
+        }).then(res => {
+            document.getElementById('message-email').value = '';
+            document.getElementById('message-name').value = '';
+            document.getElementById('message-title').value = '';
+            document.getElementById('message-text').value = '';
+            document.getElementById('js_result_message').innerHTML = "Message send";
+        }).catch(err => {
+            console.log(err);
+            document.getElementById('js_result_message').innerHTML = "Invalid data";
+        })
+
+    }
+</script>

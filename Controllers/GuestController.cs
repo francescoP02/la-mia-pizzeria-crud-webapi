@@ -20,6 +20,12 @@ namespace la_mia_pizzeria_static.Controllers
             return View(/*"Index", _db.pizzasList.Include(p => p.Category).Include("Ingredients").ToList()*/);
            
         }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
         public IActionResult Show(int id)
         {
             //try
