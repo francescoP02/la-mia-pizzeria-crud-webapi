@@ -34,6 +34,16 @@
 </html>
 
 <script type="text/javascript">
+
+    function deletePizza(id) {
+        axios.delete('/api/pizzas/delete/' + id).then(res => {
+        }).catch(err => {
+            console.log(err);
+            loadPizze();
+        })
+        location.reload();
+    }
+
     document.getElementById("search_pizza").addEventListener("keyup", searchPizza);
     loadPizze();
     function searchPizza(event) {
@@ -68,7 +78,7 @@
                                 <div class="card-footer d-flex justify-content-around">
                                     <a href="Pizza/Show/${pizza.id}" type = "button" class="btn btn-primary"> View Pizza </a>
                                     <a class="btn btn-warning" href="Pizza/EditForm/${pizza.id}">Edit</a>
-                                    <a class="btn btn-danger" href="Pizza/Delete/${pizza.id}">Delete</a>
+                                    <button class="btn btn-danger" onClick="deletePizza(${pizza.id})">Elimina</button>
                                 </div>
                         </div>`
                 })
