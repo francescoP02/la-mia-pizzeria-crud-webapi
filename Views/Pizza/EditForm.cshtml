@@ -63,8 +63,24 @@
         </div>
 
         <div class="d-flex justify-content-around">
-            <button class="btn btn-primary" action="submit">Edit</button>
+            <button class="btn btn-primary" onclick="updatePizza(@Model.Pizza.Id)">Edit</button>
             <a class="btn btn-primary" asp-action="Index">Back to List</a>
         </div>
     </form>
 </div>
+
+<script type="text/javascript">
+    function updatePizza(id) {
+        axios.put('/api/pizzas/put/' + id, {
+            Name: document.getElementById('Name').value,
+            Description: document.getElementById('Description').value,
+            Price: document.getElementById('Price').value,
+            Photo: document.getElementById('Photo').value,
+        }).then(res => {
+            alert("modifica avvenuta")
+        }).catch(err => {
+            console.log("errore");
+            alert('Dati non validi');
+        })
+    }
+</script>

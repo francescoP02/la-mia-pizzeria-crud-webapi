@@ -46,6 +46,30 @@ namespace la_mia_pizzeria_static.Controllers.Api
 
         }
 
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Pizza pizza)
+        {
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
+            }
+                Pizza pizzaDaModificare = _db.pizzasList.Where(p => p.Id == id).FirstOrDefault();
+
+                if (pizzaDaModificare != null)
+                {
+                    pizzaDaModificare.Name = pizza.Name;
+                    pizzaDaModificare.Description = pizza.Description;
+                    pizzaDaModificare.Photo = pizza.Photo;
+                    pizzaDaModificare.Price = pizza.Price;
+                    _db.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
